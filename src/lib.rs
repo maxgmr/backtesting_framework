@@ -14,9 +14,20 @@
 use serde::{Deserialize, Serialize};
 
 mod portfolio;
+mod price_data;
 
 pub use portfolio::*;
+pub use price_data::*;
 
 /// A Unix timestamp.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct Timestamp(i64);
+
+/// An interval of time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Interval {
+    /// The start time of the interval.
+    pub start: Timestamp,
+    /// The end time of the interval.
+    pub end: Timestamp,
+}
