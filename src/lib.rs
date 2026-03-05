@@ -13,9 +13,11 @@
 
 use serde::{Deserialize, Serialize};
 
+mod asset;
 mod portfolio;
 mod price_data;
 
+pub use asset::*;
 pub use portfolio::*;
 pub use price_data::*;
 
