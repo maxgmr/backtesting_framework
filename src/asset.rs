@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::Timestamp;
 
 /// All the data for a given asset.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[allow(missing_docs)]
 pub struct Asset {
     pub address: Option<String>,
@@ -16,7 +16,6 @@ pub struct Asset {
     pub industry: Option<String>,
     pub sector: Option<String>,
     pub full_time_employees: Option<usize>,
-    pub company_officers: Vec<CompanyOfficer>,
     pub audit_risk: Option<usize>,
     pub board_risk: Option<usize>,
     pub compensation_risk: Option<usize>,
@@ -34,7 +33,7 @@ pub struct Asset {
     pub first_trade_timestamp: Option<Timestamp>,
     pub timezone_full_name: Option<String>,
     pub timezone_short_name: Option<String>,
-    pub gmt_offset_ms: Option<isize>,
+    pub gmt_offset_ms: Option<i64>,
     /// The last traded price.
     pub previous_close: Option<f64>,
     /// The price at market open.
@@ -68,23 +67,23 @@ pub struct Asset {
     /// Current stock price divided by estimated earnings per share for the next 12 months.
     pub forward_pe: Option<f64>,
     /// Total number of units traded on a given day.
-    pub volume: Option<usize>,
+    pub volume: Option<u64>,
     /// Total number of units traded on a given day (standard hrs).
-    pub regular_market_volume: Option<usize>,
+    pub regular_market_volume: Option<u64>,
     /// Average number of units traded over the past 3 months.
-    pub average_volume: Option<usize>,
+    pub average_volume: Option<u64>,
     /// Average number of units traded over the last 10 days.
-    pub average_volume_10days: Option<usize>,
+    pub average_volume_10days: Option<u64>,
     /// The highest price a buyer is willing to pay for this asset.
     pub bid: Option<f64>,
     /// The lowest price a seller is willing to accept for this asset.
     pub ask: Option<f64>,
     /// The total number of shares available at the bid price.
-    pub bid_size: Option<usize>,
+    pub bid_size: Option<i64>,
     /// The total number of shares available at the ask price.
-    pub ask_size: Option<usize>,
+    pub ask_size: Option<i64>,
     /// Total value of this asset's outstanding shares.
-    pub market_cap: Option<f64>,
+    pub market_cap: Option<u64>,
     /// The lowest price a stock has traded over the past year.
     pub fifty_two_week_low: Option<f64>,
     /// The highest price a stock has traded over the past year.
@@ -103,19 +102,19 @@ pub struct Asset {
     pub currency: Option<String>,
     /// Measure of asset's total value; sum of market cap, debt, and minority interest while
     /// subtracting cash and equivalents.
-    pub enterprise_value: Option<usize>,
+    pub enterprise_value: Option<i64>,
     /// Proportion of money kept from revenue after accounting for all expenses.
     pub profit_margins: Option<f64>,
     /// Number of shares available to the general public to trade on the open market.
-    pub float_shares: Option<f64>,
+    pub float_shares: Option<u64>,
     /// Total number of shares currently held by all investors.
-    pub shares_outstanding: Option<usize>,
+    pub shares_outstanding: Option<u64>,
     /// Total number of shorted shares.
-    pub shares_short: Option<usize>,
+    pub shares_short: Option<u64>,
     /// Total number of shorted shares last month.
-    pub shares_short_prior_month: Option<usize>,
+    pub shares_short_prior_month: Option<u64>,
     /// [`Timestamp`] last month's shorted shares were recorded.
-    pub share_short_prior_month_date: Option<Timestamp>,
+    pub shares_short_prior_month_date: Option<Timestamp>,
     /// [`Timestamp`] the shorted share count was recorded.
     pub date_short_interest: Option<Timestamp>,
     /// Proportion of shares held by short sellers.
@@ -131,7 +130,7 @@ pub struct Asset {
     pub short_percent_of_float: Option<f64>,
     /// Share count that would exist if all convertible securities were converted into common
     /// stock.
-    pub implied_shares_outstanding: Option<usize>,
+    pub implied_shares_outstanding: Option<u64>,
     /// Net assets per share.
     pub book_value: Option<f64>,
     /// Ratio of market cap to book value (net assets).
@@ -146,7 +145,7 @@ pub struct Asset {
     pub earnings_quarterly_growth: Option<f64>,
     /// Portion of net profit available for common stockholders after all expenses, taxes, and
     /// preferred stock dividends have been paid.
-    pub net_income_to_common: Option<usize>,
+    pub net_income_to_common: Option<i64>,
     /// Profit per share over the last 12 months.
     pub trailing_eps: Option<f64>,
     /// Anticipated profit per share over the next 12 months.
@@ -180,21 +179,21 @@ pub struct Asset {
     /// Mean recommendation (smaller is better).
     pub recommendation_mean: Option<f64>,
     /// Number of analyst opinions.
-    pub number_of_analyst_opinions: Option<usize>,
+    pub number_of_analyst_opinions: Option<u64>,
     /// Total amount of cash owned by asset.
-    pub total_cash: Option<usize>,
+    pub total_cash: Option<u64>,
     /// Cash per share.
-    pub total_case_per_share: Option<f64>,
+    pub total_cash_per_share: Option<f64>,
     /// Earnings before interest, taxes, depreciation, and amortization.
-    pub ebitda: Option<usize>,
+    pub ebitda: Option<i64>,
     /// Total financial obligations.
-    pub total_debt: Option<usize>,
+    pub total_debt: Option<u64>,
     /// Ratio of liquid assets to debt.
     pub quick_ratio: Option<f64>,
     /// Ratio of liquid assets to short-term (<1 year) obligations.
     pub current_ratio: Option<f64>,
     /// Total amount of money brought in before expenses.
-    pub total_revenue: Option<usize>,
+    pub total_revenue: Option<i64>,
     /// Ratio of total liabilities to total shareholders' equity.
     pub debt_to_equity: Option<f64>,
     /// Revenue per share.
@@ -204,11 +203,11 @@ pub struct Asset {
     /// Dollars of profit earned for every dollar of shareholders' equity.
     pub return_on_equity: Option<f64>,
     /// Revenue minus direct costs of goods and services.
-    pub gross_profits: Option<f64>,
+    pub gross_profits: Option<i64>,
     /// Cash generated after operating expenses and capital expenditures.
-    pub free_cash_flow: Option<usize>,
+    pub free_cash_flow: Option<i64>,
     /// Cash generated from core, day-to-day business operations (TTM).
-    pub operating_cash_flow: Option<usize>,
+    pub operating_cash_flow: Option<i64>,
     /// Increase in net profit over the last 12 months.
     pub earnings_growth: Option<f64>,
     /// Increase in revenue over the last 12 months.
@@ -221,16 +220,4 @@ pub struct Asset {
     pub operating_margins: Option<f64>,
     /// The currency of the financial data.
     pub financial_currency: Option<String>,
-}
-
-/// A company officer.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[allow(missing_docs)]
-pub struct CompanyOfficer {
-    pub name: String,
-    pub age: Option<usize>,
-    pub title: String,
-    pub year_born: Option<usize>,
-    pub fiscal_year: Option<usize>,
-    pub total_pay: Option<f64>,
 }
