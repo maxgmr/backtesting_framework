@@ -1,6 +1,7 @@
+use time::OffsetDateTime;
 use yahoo_finance_api as yahoo;
 
-use crate::{Asset, Timestamp};
+use crate::Asset;
 
 /// Get [`Asset`] data for the given ticker using the Yahoo Finance API.
 ///
@@ -43,10 +44,9 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
                 a.compensation_risk = p.compensation_risk.map(|cr| cr as usize);
                 a.share_holder_rights_risk = p.share_holder_rights_risk.map(|shrr| shrr as usize);
                 a.overall_risk = p.overall_risk.map(|or| or as usize);
-                a.governance_timestamp = p.governance_epoch_date.map(|ged| Timestamp(ged.into()));
-                a.compensation_as_of_timestamp = p
-                    .compensation_as_of_epoch_date
-                    .map(|caoed| Timestamp(caoed.into()));
+                a.governance_timestamp = convert_odt(p.governance_epoch_date.map(i64::from))?;
+                a.compensation_as_of_timestamp =
+                    convert_odt(p.compensation_as_of_epoch_date.map(i64::from))?;
                 a.ir_website = p.ir_website;
             }
 
@@ -57,7 +57,7 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
                 a.underlying_symbol = q.underlying_symbol;
                 a.short_name = q.short_name;
                 a.long_name = q.long_name;
-                a.first_trade_timestamp = q.first_trade_date_epoch_utc.map(Timestamp);
+                a.first_trade_timestamp = convert_odt(q.first_trade_date_epoch_utc)?;
                 a.timezone_full_name = q.timezone_full_name;
                 a.timezone_short_name = q.timezone_short_name;
                 a.gmt_offset_ms = q.gmt_off_set_milliseconds;
@@ -74,7 +74,7 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
                 a.regular_market_day_high = s.regular_market_day_high;
                 a.dividend_rate = s.dividend_rate;
                 a.dividend_yield = s.dividend_yield;
-                a.ex_dividend_date = s.ex_dividend_date.map(Timestamp);
+                a.ex_dividend_date = convert_odt(s.ex_dividend_date)?;
                 a.payout_ratio = s.payout_ratio;
                 a.five_year_dividend_yield = s.five_year_avg_dividend_yield;
                 a.beta = s.beta;
@@ -106,10 +106,9 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
                 a.shares_outstanding = d.shares_outstanding;
                 a.shares_short = d.shares_short;
                 a.shares_short_prior_month = d.shares_short_prior_month;
-                a.shares_short_prior_month_date = d
-                    .shares_short_previous_month_date
-                    .map(|sspm| Timestamp(sspm.cast_signed()));
-                a.date_short_interest = d.date_short_interest.map(Timestamp);
+                a.shares_short_prior_month_date =
+                    convert_odt(d.shares_short_previous_month_date.map(u64::cast_signed))?;
+                a.date_short_interest = convert_odt(d.date_short_interest)?;
                 a.shares_percent_shares_out = d.shares_percent_shares_out;
                 a.held_percent_insiders = d.held_percent_insiders;
                 a.held_percent_institutions = d.held_percent_institutions;
@@ -118,20 +117,20 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
                 a.implied_shares_outstanding = d.implied_shares_outstanding;
                 a.book_value = d.book_value;
                 a.price_to_book = d.price_to_book;
-                a.last_fiscal_year_end = d.last_fiscal_year_end.map(Timestamp);
-                a.next_fiscal_year_end = d.next_fiscal_year_end.map(Timestamp);
-                a.most_recent_quarter = d.most_recent_quarter.map(Timestamp);
+                a.last_fiscal_year_end = convert_odt(d.last_fiscal_year_end)?;
+                a.next_fiscal_year_end = convert_odt(d.next_fiscal_year_end)?;
+                a.most_recent_quarter = convert_odt(d.most_recent_quarter)?;
                 a.earnings_quarterly_growth = d.earnings_quarterly_growth;
                 a.net_income_to_common = d.net_income_to_common;
                 a.trailing_eps = d.trailing_eps;
                 a.last_split_factor = d.last_split_factor;
-                a.last_split_date = d.last_split_date.map(Timestamp);
+                a.last_split_date = convert_odt(d.last_split_date)?;
                 a.enterprise_to_revenue = d.enterprise_to_revenue;
                 a.enterprise_to_ebitda = d.enterprise_to_ebitda;
                 a.fifty_two_week_change = d.fifty_two_week_change;
                 a.sandp_fifty_two_week_change = d.sand_p_fifty_two_week_change;
                 a.last_dividend_value = d.last_dividend_value;
-                a.last_dividend_date = d.last_dividend_date.map(Timestamp);
+                a.last_dividend_date = convert_odt(d.last_dividend_date)?;
             }
 
             if let Some(f) = data.financial_data {
@@ -167,6 +166,15 @@ impl TryFrom<yahoo::YQuoteSummary> for Asset {
         } else {
             Err(yahoo::YahooError::NoResult)
         }
+    }
+}
+
+fn convert_odt(val: Option<i64>) -> Result<Option<OffsetDateTime>, yahoo::YahooError> {
+    match val {
+        Some(v) => OffsetDateTime::from_unix_timestamp(v)
+            .map(Some)
+            .map_err(|_| yahoo_finance_api::YahooError::InvalidDateFormat),
+        None => Ok(None),
     }
 }
 

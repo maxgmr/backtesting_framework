@@ -12,6 +12,7 @@
 )]
 
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 
 mod asset;
 mod portfolio;
@@ -25,15 +26,11 @@ pub use price_data::*;
 #[cfg(feature = "yahoo")]
 pub use yahoo::*;
 
-/// A Unix timestamp.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct Timestamp(i64);
-
 /// An interval of time.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Interval {
     /// The start time of the interval.
-    pub start: Timestamp,
+    pub start: OffsetDateTime,
     /// The end time of the interval.
-    pub end: Timestamp,
+    pub end: OffsetDateTime,
 }

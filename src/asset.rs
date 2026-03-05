@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
-
-use crate::Timestamp;
+use time::OffsetDateTime;
 
 /// All the data for a given asset.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -21,8 +20,8 @@ pub struct Asset {
     pub compensation_risk: Option<usize>,
     pub share_holder_rights_risk: Option<usize>,
     pub overall_risk: Option<usize>,
-    pub governance_timestamp: Option<Timestamp>,
-    pub compensation_as_of_timestamp: Option<Timestamp>,
+    pub governance_timestamp: Option<OffsetDateTime>,
+    pub compensation_as_of_timestamp: Option<OffsetDateTime>,
     pub ir_website: Option<String>,
     pub exchange: Option<String>,
     pub quote_type: Option<String>,
@@ -30,7 +29,7 @@ pub struct Asset {
     pub underlying_symbol: Option<String>,
     pub short_name: Option<String>,
     pub long_name: Option<String>,
-    pub first_trade_timestamp: Option<Timestamp>,
+    pub first_trade_timestamp: Option<OffsetDateTime>,
     pub timezone_full_name: Option<String>,
     pub timezone_short_name: Option<String>,
     pub gmt_offset_ms: Option<i64>,
@@ -54,8 +53,8 @@ pub struct Asset {
     pub dividend_rate: Option<f64>,
     /// The dividend as a percent of current share price.
     pub dividend_yield: Option<f64>,
-    /// The [`Timestamp`] after the stock dividend is paid.
-    pub ex_dividend_date: Option<Timestamp>,
+    /// The time after the stock dividend is paid.
+    pub ex_dividend_date: Option<OffsetDateTime>,
     /// The percentage of a company's net income paid as dividends.
     pub payout_ratio: Option<f64>,
     /// Average dividend yield of a company over 5 years.
@@ -113,10 +112,10 @@ pub struct Asset {
     pub shares_short: Option<u64>,
     /// Total number of shorted shares last month.
     pub shares_short_prior_month: Option<u64>,
-    /// [`Timestamp`] last month's shorted shares were recorded.
-    pub shares_short_prior_month_date: Option<Timestamp>,
-    /// [`Timestamp`] the shorted share count was recorded.
-    pub date_short_interest: Option<Timestamp>,
+    /// The time last month's shorted shares were recorded.
+    pub shares_short_prior_month_date: Option<OffsetDateTime>,
+    /// The time the shorted share count was recorded.
+    pub date_short_interest: Option<OffsetDateTime>,
     /// Proportion of shares held by short sellers.
     pub shares_percent_shares_out: Option<f64>,
     /// Proportion of shares held by insiders.
@@ -135,12 +134,12 @@ pub struct Asset {
     pub book_value: Option<f64>,
     /// Ratio of market cap to book value (net assets).
     pub price_to_book: Option<f64>,
-    /// [`Timestamp`] of the last fiscal year end.
-    pub last_fiscal_year_end: Option<Timestamp>,
-    /// [`Timestamp`] of the next fiscal year end.
-    pub next_fiscal_year_end: Option<Timestamp>,
-    /// [`Timestamp`] of the most recent quarter.
-    pub most_recent_quarter: Option<Timestamp>,
+    /// The time of the last fiscal year end.
+    pub last_fiscal_year_end: Option<OffsetDateTime>,
+    /// The time of the next fiscal year end.
+    pub next_fiscal_year_end: Option<OffsetDateTime>,
+    /// The time of the most recent quarter.
+    pub most_recent_quarter: Option<OffsetDateTime>,
     /// Quarterly percentage change of a company's net profit.
     pub earnings_quarterly_growth: Option<f64>,
     /// Portion of net profit available for common stockholders after all expenses, taxes, and
@@ -152,8 +151,8 @@ pub struct Asset {
     pub forward_eps: Option<f64>,
     /// The most recent ratio of the last stock split.
     pub last_split_factor: Option<String>,
-    /// The [`Timestamp`] of the last stock split.
-    pub last_split_date: Option<Timestamp>,
+    /// The time of the last stock split.
+    pub last_split_date: Option<OffsetDateTime>,
     /// Ratio of enterprise value of annual sales.
     pub enterprise_to_revenue: Option<f64>,
     /// Ratio of enterprise value to EBITDA.
@@ -164,8 +163,8 @@ pub struct Asset {
     pub sandp_fifty_two_week_change: Option<f64>,
     /// The most recent cash dividend payment per share.
     pub last_dividend_value: Option<f64>,
-    /// The [`Timestamp`] of the last dividend payment date.
-    pub last_dividend_date: Option<Timestamp>,
+    /// The time of the last dividend payment date.
+    pub last_dividend_date: Option<OffsetDateTime>,
     /// The current price.
     pub current_price: Option<f64>,
     /// Maximum forecasted price in the next 12 months.

@@ -1,7 +1,7 @@
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::Timestamp;
+use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 
 /// A portfolio that tracks cash, positions, and equity over time.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,7 +25,7 @@ pub struct Trade {
     action: TradeAction,
     quantity: f64,
     price: f64,
-    timestamp: Timestamp,
+    time: OffsetDateTime,
 }
 
 /// Defines whether the [`Trade`] is a buy or a sell.
@@ -50,7 +50,7 @@ pub struct Position {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EquityPoint {
     /// The time at which this value was recorded.
-    pub timestamp: Timestamp,
+    pub time: OffsetDateTime,
     /// The value.
     pub equity: f64,
 }
