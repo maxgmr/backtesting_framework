@@ -42,6 +42,8 @@ pub struct PriceBar {
     pub low: f64,
     /// The final price at the end of the interval.
     pub close: f64,
+    /// The final price at the end of the interval, adjusted to account for corporate actions.
+    pub adjusted_close: f64,
     /// The total number of units traded throughout the interval.
-    pub volume: f64,
+    pub volume: u64,
 }
