@@ -1,12 +1,12 @@
 [package]
-name = "backtesting-framework"
+name = "backtesting_framework"
 version = "0.1.0-alpha.1"
 authors = ["Max Gilmour <mgilmour@maxgmr.ca"]
 edition = "2024"
 description = "Simple framework for testing quantitative trading strategies"
 readme = "README.md"
-homepage = "https://github.com/maxgmr/backtesting-framework"
-repository = "https://github.com/maxgmr/backtesting-framework"
+homepage = "https://github.com/maxgmr/backtesting_framework"
+repository = "https://github.com/maxgmr/backtesting_framework"
 license = "AGPL-3.0"
 
 [features]
