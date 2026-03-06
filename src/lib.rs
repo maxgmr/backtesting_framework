@@ -15,16 +15,21 @@ use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
 mod asset;
+mod plotting;
 mod portfolio;
 mod price_data;
 #[cfg(feature = "yahoo")]
 mod yahoo;
 
 pub use asset::*;
+pub use plotting::*;
 pub use portfolio::*;
 pub use price_data::*;
 #[cfg(feature = "yahoo")]
 pub use yahoo::*;
+
+// Re-exports
+pub use time;
 
 /// An interval of time.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
