@@ -48,9 +48,9 @@ where
 ///
 /// This function returns a [`PlottingError`] if any errors are encountered while generating the
 /// graphic.
-pub fn render_price_candlesticks(
+pub fn render_price_candlesticks<P: AsRef<Path>>(
     price_data: &PriceData,
-    out_path: &Path,
+    out_path: P,
 ) -> Result<(), PlottingError> {
     if price_data.is_empty() {
         return Err(PlottingError::EmptyInputError);
@@ -102,7 +102,8 @@ pub fn render_price_candlesticks(
     let padded_y_min = (y_min - y_padding).max(0f64);
     let padded_y_max = y_max + y_padding;
 
-    let root = BitMapBackend::new(out_path, (RENDER_WIDTH, RENDER_HEIGHT)).into_drawing_area();
+    let root =
+        BitMapBackend::new(out_path.as_ref(), (RENDER_WIDTH, RENDER_HEIGHT)).into_drawing_area();
     root.fill(&WHITE)?;
 
     let mut chart = ChartBuilder::on(&root)
